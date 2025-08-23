@@ -705,8 +705,8 @@ func (s *System) processIPv6ICMP(ipHdr header.IPv6, icmpHdr header.ICMPv6) error
 	ipHdr.SetDestinationAddr(sourceAddress)
 	icmpHdr.SetChecksum(header.ICMPv6Checksum(header.ICMPv6ChecksumParams{
 		Header: icmpHdr,
-		Src:    ipHdr.SourceAddress(),
-		Dst:    ipHdr.DestinationAddress(),
+		Src:    ipHdr.SourceAddressSlice(),
+		Dst:    ipHdr.DestinationAddressSlice(),
 	}))
 	return nil
 }
@@ -741,8 +741,8 @@ func (s *System) rejectIPv6WithICMP(ipHdr header.IPv6, code header.ICMPv6Code) e
 	icmpHdr.SetCode(code)
 	icmpHdr.SetChecksum(header.ICMPv6Checksum(header.ICMPv6ChecksumParams{
 		Header:      icmpHdr[:header.ICMPv6DstUnreachableMinimumSize],
-		Src:         newIPHdr.SourceAddress(),
-		Dst:         newIPHdr.DestinationAddress(),
+		Src:         newIPHdr.SourceAddressSlice(),
+		Dst:         newIPHdr.DestinationAddressSlice(),
 		PayloadCsum: checksum.Checksum(payload, 0),
 		PayloadLen:  len(payload),
 	}))
