@@ -19,9 +19,14 @@ import (
 )
 
 type Handler interface {
+	PrepareConnection(network string, source M.Socksaddr, destination M.Socksaddr, routeContext DirectRouteContext) (DirectRouteDestination, error)
 	N.TCPConnectionHandler
 	PacketHandler
 	E.Handler
+}
+
+type DirectRouteContext interface {
+	WritePacket(packet []byte) error
 }
 
 type PacketHandler interface {

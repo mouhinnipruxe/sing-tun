@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"net"
 	"net/netip"
+	"time"
 
 	"github.com/metacubex/sing/common/control"
 	E "github.com/metacubex/sing/common/exceptions"
@@ -21,7 +22,7 @@ type StackOptions struct {
 	Tun                    Tun
 	TunOptions             Options
 	EndpointIndependentNat bool
-	UDPTimeout             int64
+	UDPTimeout             time.Duration
 	Handler                Handler
 	Logger                 logger.Logger
 	ForwarderBindInterface bool

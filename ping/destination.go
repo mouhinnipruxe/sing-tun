@@ -1,0 +1,78 @@
+package ping
+
+import (
+	"context"
+	"errors"
+	"net/netip"
+	"os"
+	"runtime"
+
+	"github.com/metacubex/sing-tun"
+	"github.com/metacubex/sing/common/buf"
+	"github.com/metacubex/sing/common/control"
+	E "github.com/metacubex/sing/common/exceptions"
+	"github.com/metacubex/sing/common/logger"
+)
+
+var _ tun.DirectRouteDestination = (*Destination)(nil)
+
+type Destination struct {
+	ctx          context.Context
+	logger       logger.ContextLogger
+	routeContext tun.DirectRouteContext
+	conn         *Conn
+}
+
+func ConnectDestination(ctx context.Context, logger logger.ContextLogger, controlFunc control.Func, address netip.Addr, routeContext tun.DirectRouteContext) (tun.DirectRouteDestination, error) {
+	var (
+		conn *Conn
+		err  error
+	)
+	switch runtime.GOOS {
+	case "darwin", "ios", "windows":
+		conn, err = Connect(false, controlFunc, address)
+	default:
+		conn, err = Connect(true, controlFunc, address)
+		if errors.Is(err, os.ErrPermission) {
+			conn, err = Connect(false, controlFunc, address)
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	d := &Destination{
+		ctx:          ctx,
+		logger:       logger,
+		routeContext: routeContext,
+		conn:         conn,
+	}
+	go d.loopRead()
+	return d, nil
+}
+
+func (d *Destination) loopRead() {
+	for {
+		buffer := buf.NewPacket()
+		err := d.conn.ReadIP(buffer)
+		if err != nil {
+			buffer.Release()
+			if !E.IsClosed(err) {
+				d.logger.ErrorContext(d.ctx, E.Cause(err, "receive ICMP echo reply"))
+			}
+			return
+		}
+		err = d.routeContext.WritePacket(buffer.Bytes())
+		if err != nil {
+			d.logger.Error(d.ctx, E.Cause(err, "write ICMP echo reply"))
+		}
+		buffer.Release()
+	}
+}
+
+func (d *Destination) WritePacket(packet *buf.Buffer) error {
+	return d.conn.WriteIP(packet)
+}
+
+func (d *Destination) Close() error {
+	return d.conn.Close()
+}
