@@ -22,16 +22,16 @@ type DirectRouteSession struct {
 }
 
 type DirectRouteMapping struct {
-	status *cache.LruCache[DirectRouteSession, DirectRouteDestination]
+	status  *cache.LruCache[DirectRouteSession, DirectRouteDestination]
 	timeout time.Duration
 }
 
 func NewDirectRouteMapping(timeout time.Duration) *DirectRouteMapping {
-	//mapping.SetHealthCheck(func(session DirectRouteSession, destination DirectRouteDestination) bool {
-	//	return !destination.IsClosed()
-	//})
 	status := cache.New[DirectRouteSession, DirectRouteDestination](
 		cache.WithSize[DirectRouteSession, DirectRouteDestination](1024),
+		cache.WithHealthCheck[DirectRouteSession, DirectRouteDestination](func(session DirectRouteSession, destination DirectRouteDestination) bool {
+			return !destination.IsClosed()
+		}),
 		cache.WithEvict[DirectRouteSession, DirectRouteDestination](func(session DirectRouteSession, action DirectRouteDestination) {
 			action.Close()
 		}),
