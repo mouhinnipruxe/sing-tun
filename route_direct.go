@@ -4,8 +4,14 @@ import (
 	"net/netip"
 	"time"
 
+	"github.com/metacubex/sing/common/buf"
 	"github.com/metacubex/sing/common/cache"
 )
+
+type DirectRouteDestination interface {
+	WritePacket(packet *buf.Buffer) error
+	Close() error
+}
 
 type DirectRouteSession struct {
 	// IPVersion uint8
@@ -14,11 +20,11 @@ type DirectRouteSession struct {
 	Destination netip.Addr
 }
 
-type RouteMapping struct {
+type DirectRouteMapping struct {
 	status *cache.LruCache[DirectRouteSession, DirectRouteDestination]
 }
 
-func NewRouteMapping(timeout time.Duration) *RouteMapping {
+func NewDirectRouteMapping(timeout time.Duration) *DirectRouteMapping {
 	status := cache.New[DirectRouteSession, DirectRouteDestination](
 		cache.WithSize[DirectRouteSession, DirectRouteDestination](1024),
 		cache.WithEvict[DirectRouteSession, DirectRouteDestination](func(session DirectRouteSession, action DirectRouteDestination) {
@@ -27,10 +33,10 @@ func NewRouteMapping(timeout time.Duration) *RouteMapping {
 		cache.WithUpdateAgeOnGet[DirectRouteSession, DirectRouteDestination](),
 		cache.WithAge[DirectRouteSession, DirectRouteDestination](int64(timeout.Seconds())),
 	)
-	return &RouteMapping{status}
+	return &DirectRouteMapping{status}
 }
 
-func (m *RouteMapping) Lookup(session DirectRouteSession, constructor func() (DirectRouteDestination, error)) (DirectRouteDestination, error) {
+func (m *DirectRouteMapping) Lookup(session DirectRouteSession, constructor func() (DirectRouteDestination, error)) (DirectRouteDestination, error) {
 	var (
 		created DirectRouteDestination
 		err     error

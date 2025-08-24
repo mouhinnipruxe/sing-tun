@@ -27,7 +27,7 @@ type ICMPForwarder struct {
 	inet4Address netip.Addr
 	inet6Address netip.Addr
 	handler      Handler
-	directNat    *RouteMapping
+	directNat    *DirectRouteMapping
 }
 
 func NewICMPForwarder(
@@ -44,7 +44,7 @@ func NewICMPForwarder(
 		inet4Address: inet4Address,
 		inet6Address: inet6Address,
 		handler:      handler,
-		directNat:    NewRouteMapping(timeout),
+		directNat:    NewDirectRouteMapping(timeout),
 	}
 }
 

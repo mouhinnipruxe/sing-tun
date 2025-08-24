@@ -42,7 +42,7 @@ type System struct {
 	tcpPort              uint16
 	tcpPort6             uint16
 	tcpNat               *TCPNat
-	directNat            *RouteMapping
+	directNat            *DirectRouteMapping
 	bindInterface        bool
 	interfaceFinder      control.InterfaceFinder
 	enforceBind          bool
@@ -169,7 +169,7 @@ func (s *System) start() error {
 		go s.acceptLoop(tcpListener)
 	}
 	s.tcpNat = NewNat(s.ctx, s.udpTimeout)
-	s.directNat = NewRouteMapping(s.udpTimeout)
+	s.directNat = NewDirectRouteMapping(s.udpTimeout)
 	return nil
 }
 
