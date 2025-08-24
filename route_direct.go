@@ -11,6 +11,7 @@ import (
 type DirectRouteDestination interface {
 	WritePacket(packet *buf.Buffer) error
 	Close() error
+	IsClosed() bool
 }
 
 type DirectRouteSession struct {
@@ -25,6 +26,9 @@ type DirectRouteMapping struct {
 }
 
 func NewDirectRouteMapping(timeout time.Duration) *DirectRouteMapping {
+	//mapping.SetHealthCheck(func(session DirectRouteSession, destination DirectRouteDestination) bool {
+	//	return !destination.IsClosed()
+	//})
 	status := cache.New[DirectRouteSession, DirectRouteDestination](
 		cache.WithSize[DirectRouteSession, DirectRouteDestination](1024),
 		cache.WithEvict[DirectRouteSession, DirectRouteDestination](func(session DirectRouteSession, action DirectRouteDestination) {
