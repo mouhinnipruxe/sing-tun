@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/metacubex/sing/common/buf"
 	E "github.com/metacubex/sing/common/exceptions"
@@ -19,7 +20,13 @@ import (
 )
 
 type Handler interface {
-	PrepareConnection(network string, source M.Socksaddr, destination M.Socksaddr, routeContext DirectRouteContext) (DirectRouteDestination, error)
+	PrepareConnection(
+		network string,
+		source M.Socksaddr,
+		destination M.Socksaddr,
+		routeContext DirectRouteContext,
+		timeout time.Duration,
+	) (DirectRouteDestination, error)
 	N.TCPConnectionHandler
 	PacketHandler
 	E.Handler

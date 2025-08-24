@@ -23,6 +23,7 @@ type DirectRouteSession struct {
 
 type DirectRouteMapping struct {
 	status *cache.LruCache[DirectRouteSession, DirectRouteDestination]
+	timeout time.Duration
 }
 
 func NewDirectRouteMapping(timeout time.Duration) *DirectRouteMapping {
@@ -37,16 +38,16 @@ func NewDirectRouteMapping(timeout time.Duration) *DirectRouteMapping {
 		cache.WithUpdateAgeOnGet[DirectRouteSession, DirectRouteDestination](),
 		cache.WithAge[DirectRouteSession, DirectRouteDestination](int64(timeout.Seconds())),
 	)
-	return &DirectRouteMapping{status}
+	return &DirectRouteMapping{status, timeout}
 }
 
-func (m *DirectRouteMapping) Lookup(session DirectRouteSession, constructor func() (DirectRouteDestination, error)) (DirectRouteDestination, error) {
+func (m *DirectRouteMapping) Lookup(session DirectRouteSession, constructor func(timeout time.Duration) (DirectRouteDestination, error)) (DirectRouteDestination, error) {
 	var (
 		created DirectRouteDestination
 		err     error
 	)
 	action, _, ok := m.status.LoadOrStoreEx(session, func() (DirectRouteDestination, bool) {
-		created, err = constructor()
+		created, err = constructor(m.timeout)
 		return created, err == nil
 	})
 	if !ok {
