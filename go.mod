@@ -8,7 +8,7 @@ require (
 	github.com/metacubex/fswatch v0.1.1
 	github.com/metacubex/gvisor v0.0.0-20250823135502-e52fca163229
 	github.com/metacubex/nftables v0.0.0-20250503052935-30a69ab87793
-	github.com/metacubex/sing v0.5.6-0.20250825141153-d247fa14f4b3
+	github.com/metacubex/sing v0.5.6-0.20250825145130-6c2956fa0bb1
 	github.com/sagernet/netlink v0.0.0-20240612041022-b9a21c07ac6a
 	github.com/stretchr/testify v1.10.0
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba

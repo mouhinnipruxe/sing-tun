@@ -20,8 +20,8 @@ github.com/metacubex/gvisor v0.0.0-20250823135502-e52fca163229 h1:sXVGoj8TdkMYp/
 github.com/metacubex/gvisor v0.0.0-20250823135502-e52fca163229/go.mod h1:8LpS0IJW1VmWzUm3ylb0e2SK5QDm5lO/2qwWLZgRpBU=
 github.com/metacubex/nftables v0.0.0-20250503052935-30a69ab87793 h1:1Qpuy+sU3DmyX9HwI+CrBT/oLNJngvBorR2RbajJcqo=
 github.com/metacubex/nftables v0.0.0-20250503052935-30a69ab87793/go.mod h1:RjRNb4G52yAgfR+Oe/kp9G4PJJ97Fnj89eY1BFO3YyA=
-github.com/metacubex/sing v0.5.6-0.20250825141153-d247fa14f4b3 h1:8bdE7azeA7hSBDo6KZh750mIEqCn0OoyyoRvRw1GhIY=
-github.com/metacubex/sing v0.5.6-0.20250825141153-d247fa14f4b3/go.mod h1:ypf0mjwlZm0sKdQSY+yQvmsbWa0hNPtkeqyRMGgoN+w=
+github.com/metacubex/sing v0.5.6-0.20250825145130-6c2956fa0bb1 h1:EVFusSg5GWWkSnzQrIeRIr6BHJaYsUSyhOx6gLeTMws=
+github.com/metacubex/sing v0.5.6-0.20250825145130-6c2956fa0bb1/go.mod h1:ypf0mjwlZm0sKdQSY+yQvmsbWa0hNPtkeqyRMGgoN+w=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/sagernet/netlink v0.0.0-20240612041022-b9a21c07ac6a h1:ObwtHN2VpqE0ZNjr6sGeT00J8uU7JF4cNUdb44/Duis=
