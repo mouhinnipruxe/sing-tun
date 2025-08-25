@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"runtime"
 	"sync"
-	"syscall"
 	"unsafe"
 
 	"github.com/metacubex/sing/common"
@@ -666,14 +665,6 @@ func (t *NativeTun) rules() []*netlink.Rule {
 			it.Family = unix.AF_INET
 			rules = append(rules, it)
 		}
-		if p4 && !t.options.StrictRoute {
-			it = netlink.NewRule()
-			it.Priority = priority
-			it.IPProto = syscall.IPPROTO_ICMP
-			it.Goto = nopPriority
-			it.Family = unix.AF_INET
-			rules = append(rules, it)
-		}
 		if p6 {
 			it = netlink.NewRule()
 			it.Priority = priority6
@@ -683,16 +674,6 @@ func (t *NativeTun) rules() []*netlink.Rule {
 			it.SuppressPrefixlen = 0
 			it.Family = unix.AF_INET6
 			rules = append(rules, it)
-		}
-
-		if p6 && !t.options.StrictRoute {
-			it = netlink.NewRule()
-			it.Priority = priority6
-			it.IPProto = syscall.IPPROTO_ICMPV6
-			it.Goto = nopPriority
-			it.Family = unix.AF_INET6
-			rules = append(rules, it)
-			priority6++
 		}
 	}
 	if p4 {
