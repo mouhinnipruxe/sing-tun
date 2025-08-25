@@ -9,11 +9,11 @@ import (
 	"net/netip"
 	"os"
 	"sync"
+	"sync/atomic"
 	"time"
 	"unsafe"
 
 	"github.com/metacubex/sing/common"
-	"github.com/metacubex/sing/common/atomic"
 	E "github.com/metacubex/sing/common/exceptions"
 	"github.com/metacubex/sing/common/windnsapi"
 

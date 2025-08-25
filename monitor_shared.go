@@ -5,9 +5,9 @@ package tun
 import (
 	"errors"
 	"sync"
+	"sync/atomic"
 	"time"
 
-	"github.com/metacubex/sing/common/atomic"
 	"github.com/metacubex/sing/common/control"
 	"github.com/metacubex/sing/common/logger"
 	"github.com/metacubex/sing/common/x/list"

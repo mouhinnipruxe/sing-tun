@@ -6,12 +6,12 @@ import (
 	"net/netip"
 	"reflect"
 	"runtime"
+	"sync/atomic"
 	"time"
 
 	"github.com/metacubex/sing-tun/internal/gtcpip/checksum"
 	"github.com/metacubex/sing-tun/internal/gtcpip/header"
 	"github.com/metacubex/sing/common"
-	"github.com/metacubex/sing/common/atomic"
 	"github.com/metacubex/sing/common/buf"
 	"github.com/metacubex/sing/common/control"
 	E "github.com/metacubex/sing/common/exceptions"
@@ -28,7 +28,7 @@ type Conn struct {
 	privileged  bool
 	conn        net.Conn
 	destination netip.Addr
-	source      atomic.TypedValue[netip.Addr]
+	source      common.TypedValue[netip.Addr]
 	closed      atomic.Bool
 }
 
