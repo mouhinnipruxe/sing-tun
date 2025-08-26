@@ -1,6 +1,7 @@
 package tun
 
 import (
+	"math"
 	"net/netip"
 	"time"
 
@@ -28,7 +29,7 @@ type DirectRouteMapping struct {
 
 func NewDirectRouteMapping(timeout time.Duration) *DirectRouteMapping {
 	status := cache.New[DirectRouteSession, DirectRouteDestination](
-		cache.WithSize[DirectRouteSession, DirectRouteDestination](1024),
+		cache.WithSize[DirectRouteSession, DirectRouteDestination](math.MaxUint16),
 		cache.WithHealthCheck[DirectRouteSession, DirectRouteDestination](func(session DirectRouteSession, action DirectRouteDestination) bool {
 			if action != nil {
 				return !action.IsClosed()
