@@ -4,6 +4,7 @@ package tun
 
 import (
 	"context"
+	"errors"
 	"net/netip"
 	"sync"
 	"time"
@@ -72,7 +73,10 @@ func (f *ICMPForwarder) HandlePacket(id stack.TransportEndpointID, pkt *stack.Pa
 					timeout,
 				)
 			})
-			if err != nil {
+			if errors.Is(err, ErrReset) {
+				gWriteUnreachable(f.stack, pkt)
+				return true
+			} else if errors.Is(err, ErrDrop) {
 				return true
 			}
 			if action != nil {
@@ -131,7 +135,10 @@ func (f *ICMPForwarder) HandlePacket(id stack.TransportEndpointID, pkt *stack.Pa
 					timeout,
 				)
 			})
-			if err != nil {
+			if errors.Is(err, ErrReset) {
+				gWriteUnreachable(f.stack, pkt)
+				return true
+			} else if errors.Is(err, ErrDrop) {
 				return true
 			}
 			if action != nil {

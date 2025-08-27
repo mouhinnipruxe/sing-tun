@@ -2,6 +2,7 @@ package tun
 
 import (
 	"context"
+	"errors"
 	"net"
 	"net/netip"
 	"syscall"
@@ -666,7 +667,9 @@ func (s *System) processIPv4ICMP(ipHdr header.IPv4, icmpHdr header.ICMPv4) (bool
 				timeout,
 			)
 		})
-		if err != nil {
+		if errors.Is(err, ErrReset) {
+			return false, s.rejectIPv4WithICMP(ipHdr, header.ICMPv4PortUnreachable)
+		} else if errors.Is(err, ErrDrop) {
 			return false, nil
 		}
 		if action != nil {
@@ -739,7 +742,11 @@ func (s *System) processIPv6ICMP(ipHdr header.IPv6, icmpHdr header.ICMPv6) (bool
 			)
 		})
 		if err != nil {
-			return false, nil
+			if errors.Is(err, ErrReset) {
+				return false, s.rejectIPv6WithICMP(ipHdr, header.ICMPv6PortUnreachable)
+			} else if errors.Is(err, ErrDrop) {
+				return false, nil
+			}
 		}
 		if action != nil {
 			return false, action.WritePacket(buf.As(ipHdr).ToOwned())
