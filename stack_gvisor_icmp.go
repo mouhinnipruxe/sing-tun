@@ -89,7 +89,6 @@ func (f *ICMPForwarder) HandlePacket(id stack.TransportEndpointID, pkt *stack.Pa
 		sourceAddress := ipHdr.SourceAddress()
 		ipHdr.SetSourceAddress(ipHdr.DestinationAddress())
 		ipHdr.SetDestinationAddress(sourceAddress)
-		icmpHdr.SetChecksum(0)
 		icmpHdr.SetChecksum(header.ICMPv4Checksum(icmpHdr[:header.ICMPv4MinimumSize], pkt.Data().Checksum()))
 		ipHdr.SetChecksum(0)
 		ipHdr.SetChecksum(^ipHdr.CalculateChecksum())
@@ -153,9 +152,11 @@ func (f *ICMPForwarder) HandlePacket(id stack.TransportEndpointID, pkt *stack.Pa
 		ipHdr.SetSourceAddress(ipHdr.DestinationAddress())
 		ipHdr.SetDestinationAddress(sourceAddress)
 		icmpHdr.SetChecksum(header.ICMPv6Checksum(header.ICMPv6ChecksumParams{
-			Header: icmpHdr,
-			Src:    ipHdr.SourceAddress(),
-			Dst:    ipHdr.DestinationAddress(),
+			Header:      icmpHdr,
+			Src:         ipHdr.SourceAddress(),
+			Dst:         ipHdr.DestinationAddress(),
+			PayloadCsum: pkt.Data().Checksum(),
+			PayloadLen:  pkt.Data().Size(),
 		}))
 		outgoingEP, gErr := f.stack.GetNetworkEndpoint(DefaultNIC, header.IPv4ProtocolNumber)
 		if gErr != nil {
