@@ -16,8 +16,8 @@ github.com/mdlayher/socket v0.4.1 h1:eM9y2/jlbs1M615oshPQOHZzj6R6wMT7bX5NPiQvn2U
 github.com/mdlayher/socket v0.4.1/go.mod h1:cAqeGjoufqdxWkD7DkpyS+wcefOtmu5OQ8KuoJGIReA=
 github.com/metacubex/fswatch v0.1.1 h1:jqU7C/v+g0qc2RUFgmAOPoVvfl2BXXUXEumn6oQuxhU=
 github.com/metacubex/fswatch v0.1.1/go.mod h1:czrTT7Zlbz7vWft8RQu9Qqh+JoX+Nnb+UabuyN1YsgI=
-github.com/metacubex/gvisor v0.0.0-20250826025146-23043f716a2c h1:N9m7IAKfBuGDieY/JT2wjfdyURgTNpFNOFpqq+RF0i4=
-github.com/metacubex/gvisor v0.0.0-20250826025146-23043f716a2c/go.mod h1:8LpS0IJW1VmWzUm3ylb0e2SK5QDm5lO/2qwWLZgRpBU=
+github.com/metacubex/gvisor v0.0.0-20250910065513-46d8fd52f27b h1:vrPIe9hHBXDymGKel2maSOPPg9o4/bcLnNgLGPl5p+g=
+github.com/metacubex/gvisor v0.0.0-20250910065513-46d8fd52f27b/go.mod h1:8LpS0IJW1VmWzUm3ylb0e2SK5QDm5lO/2qwWLZgRpBU=
 github.com/metacubex/nftables v0.0.0-20250503052935-30a69ab87793 h1:1Qpuy+sU3DmyX9HwI+CrBT/oLNJngvBorR2RbajJcqo=
 github.com/metacubex/nftables v0.0.0-20250503052935-30a69ab87793/go.mod h1:RjRNb4G52yAgfR+Oe/kp9G4PJJ97Fnj89eY1BFO3YyA=
 github.com/metacubex/sing v0.5.6-0.20250826072929-f69b475e017b h1:ukK1IMo7LJ+VmPWQPIdoslHBv4Tr3E2zE34ilQCH2i4=
