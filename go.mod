@@ -10,7 +10,7 @@ require (
 	github.com/metacubex/nftables v0.0.0-20250503052935-30a69ab87793
 	github.com/metacubex/sing v0.5.6-0.20250826072929-f69b475e017b
 	github.com/sagernet/netlink v0.0.0-20240612041022-b9a21c07ac6a
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba
 	golang.org/x/exp v0.0.0-20240904232852-e7e105dedf7e
 	golang.org/x/net v0.31.0
