@@ -6,7 +6,7 @@ require (
 	github.com/go-ole/go-ole v1.3.0
 	github.com/google/btree v1.1.3
 	github.com/metacubex/fswatch v0.1.1
-	github.com/metacubex/gvisor v0.0.0-20250910065513-46d8fd52f27b
+	github.com/metacubex/gvisor v0.0.0-20250919004547-6122b699a301
 	github.com/metacubex/nftables v0.0.0-20250503052935-30a69ab87793
 	github.com/metacubex/sing v0.5.6-0.20250826072929-f69b475e017b
 	github.com/sagernet/netlink v0.0.0-20240612041022-b9a21c07ac6a
