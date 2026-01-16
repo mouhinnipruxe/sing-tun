@@ -156,8 +156,11 @@ func init() {
 }
 
 func (t *NativeTun) Close() error {
-	flushDNSCache()
-	return t.tunFile.Close()
+	defer flushDNSCache()
+	t.stopFd.Stop()
+	err := t.tunFile.Close()
+	t.stopFd.Close()
+	return err
 }
 
 const utunControlName = "com.apple.net.utun_control"
@@ -350,6 +353,9 @@ func (t *NativeTun) BatchRead() ([]*buf.Buffer, error) {
 		}
 		t.buffers = t.buffers[:0]
 		return nil, errno
+	}
+	if n < 0 {
+		return nil, os.ErrClosed
 	}
 	if n < 1 {
 		return nil, nil
