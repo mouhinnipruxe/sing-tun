@@ -1,6 +1,7 @@
 package tun
 
 import (
+	"errors"
 	"math/rand"
 	"net"
 	"net/netip"
@@ -199,7 +200,7 @@ func open(name string, vnetHdr bool) (int, error) {
 
 func (t *NativeTun) configure(tunLink netlink.Link) error {
 	err := netlink.LinkSetMTU(tunLink, int(t.options.MTU))
-	if err == unix.EPERM {
+	if errors.Is(err, unix.EPERM) {
 		// unprivileged
 		return nil
 	} else if err != nil {
@@ -266,7 +267,10 @@ func (t *NativeTun) configure(tunLink netlink.Link) error {
 	}
 
 	err = netlink.LinkSetUp(tunLink)
-	if err != nil {
+	if errors.Is(err, unix.EPERM) {
+		// unprivileged
+		return nil
+	} else if err != nil {
 		return err
 	}
 
