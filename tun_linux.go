@@ -419,7 +419,6 @@ func (t *NativeTun) enableGSO() error {
 	err = setUDPOffload(t.tunFd)
 	if err != nil {
 		t.gro.disableUDPGRO()
-		return E.Cause(err, "enable UDP offload")
 	}
 	return nil
 }
