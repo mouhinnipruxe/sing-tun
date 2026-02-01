@@ -142,7 +142,7 @@ func (m *Mixed) batchLoopLinux(linuxTUN LinuxTUN, batchSize int) {
 			}
 		}
 		if len(writeBuffers) > 0 {
-			err = linuxTUN.BatchWrite(writeBuffers, m.frontHeadroom)
+			_, err = linuxTUN.BatchWrite(writeBuffers, m.frontHeadroom)
 			if err != nil {
 				m.logger.Trace(E.Cause(err, "batch write packet"))
 			}
