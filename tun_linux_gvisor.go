@@ -45,7 +45,7 @@ func (t *NativeTun) WritePacket(pkt *stack.PacketBuffer) (int, error) {
 }
 
 func (t *NativeTun) NewEndpoint() (stack.LinkEndpoint, stack.NICOptions, error) {
-	if t.gsoEnabled {
+	if t.vnetHdr {
 		ep, err := fdbased.New(&fdbased.Options{
 			FDs:               []int{t.tunFd},
 			MTU:               t.options.MTU,
@@ -57,16 +57,15 @@ func (t *NativeTun) NewEndpoint() (stack.LinkEndpoint, stack.NICOptions, error) 
 			return nil, stack.NICOptions{}, err
 		}
 		return ep, stack.NICOptions{}, nil
-	} else {
-		ep, err := fdbased.New(&fdbased.Options{
-			FDs:               []int{t.tunFd},
-			MTU:               t.options.MTU,
-			RXChecksumOffload: true,
-			TXChecksumOffload: t.txChecksumOffload,
-		})
-		if err != nil {
-			return nil, stack.NICOptions{}, err
-		}
-		return ep, stack.NICOptions{}, nil
 	}
+	ep, err := fdbased.New(&fdbased.Options{
+		FDs:               []int{t.tunFd},
+		MTU:               t.options.MTU,
+		RXChecksumOffload: true,
+		TXChecksumOffload: t.txChecksumOffload,
+	})
+	if err != nil {
+		return nil, stack.NICOptions{}, err
+	}
+	return ep, stack.NICOptions{}, nil
 }
