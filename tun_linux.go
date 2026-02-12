@@ -16,7 +16,6 @@ import (
 	"github.com/metacubex/sing-tun/internal/gtcpip/checksum"
 	"github.com/metacubex/sing-tun/internal/gtcpip/header"
 	"github.com/metacubex/sing/common"
-	"github.com/metacubex/sing/common/buf"
 	"github.com/metacubex/sing/common/control"
 	E "github.com/metacubex/sing/common/exceptions"
 	"github.com/metacubex/sing/common/rw"
@@ -148,10 +147,7 @@ func handleVirtioRead(in []byte, bufs [][]byte, sizes []int, offset int) (int, e
 
 func (t *NativeTun) Write(p []byte) (n int, err error) {
 	if t.vnetHdr {
-		buffer := buf.Get(virtioNetHdrLen + len(p))
-		copy(buffer[virtioNetHdrLen:], p)
-		_, err = t.BatchWrite([][]byte{buffer}, virtioNetHdrLen)
-		buf.Put(buffer)
+		_, err = t.BatchWrite([][]byte{p}, virtioNetHdrLen)
 		if err != nil {
 			return
 		}
