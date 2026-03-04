@@ -1063,15 +1063,15 @@ func (t *NativeTun) setSearchDomainForSystemdResolved() {
 }
 
 func (t *NativeTun) unsetSearchDomainForSystemdResolved() {
-    if t.options.EXP_DisableDNSHijack {
-        return
-    }
-    ctlPath, err := exec.LookPath("resolvectl")
-    if err != nil {
-        return
-    }
-    _ = shell.Exec(ctlPath, "revert", t.options.Name).Run()
-    if t.options.Logger != nil {
-        t.options.Logger.Debug("cleaned up DNS configuration for interface: ", t.options.Name)
-    }
+	if t.options.EXP_DisableDNSHijack {
+		return
+	}
+	ctlPath, err := exec.LookPath("resolvectl")
+	if err != nil {
+		return
+	}
+	_ = shell.Exec(ctlPath, "revert", t.options.Name).Run()
+	if t.options.Logger != nil {
+		t.options.Logger.Debug("cleaned up DNS configuration for interface: ", t.options.Name)
+	}
 }
