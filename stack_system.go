@@ -340,26 +340,10 @@ func (s *System) acceptLoop(listener net.Listener) {
 			s.logger.Trace(E.New("unknown session with port ", connPort))
 			continue
 		}
-		destination := M.SocksaddrFromNetIP(session.Destination)
-		if destination.Addr.Is4() {
-			for _, prefix := range s.inet4Prefixes {
-				if prefix.Contains(destination.Addr) {
-					destination.Addr = netip.AddrFrom4([4]byte{127, 0, 0, 1})
-					break
-				}
-			}
-		} else {
-			for _, prefix := range s.inet6Prefixes {
-				if prefix.Contains(destination.Addr) {
-					destination.Addr = netip.AddrFrom16([16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1})
-					break
-				}
-			}
-		}
 		go func() {
 			_ = s.handler.NewConnection(s.ctx, conn, M.Metadata{
 				Source:      M.SocksaddrFromNetIP(session.Source),
-				Destination: destination,
+				Destination: M.SocksaddrFromNetIP(session.Destination),
 			})
 			if tcpConn, isTCPConn := conn.(*net.TCPConn); isTCPConn {
 				_ = tcpConn.SetLinger(0)
