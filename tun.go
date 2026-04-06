@@ -104,6 +104,8 @@ type Options struct {
 	IncludeAndroidUser                    []int
 	IncludePackage                        []string
 	ExcludePackage                        []string
+	IncludeMACAddress                     []net.HardwareAddr
+	ExcludeMACAddress                     []net.HardwareAddr
 	InterfaceMonitor                      DefaultInterfaceMonitor
 	FileDescriptor                        int
 	Logger                                logger.Logger
