@@ -7,18 +7,18 @@ import (
 	"time"
 )
 
-type srcdst struct {
-	source      netip.AddrPort
-	destination netip.AddrPort
-}
-
 type TCPNat struct {
 	timeout    time.Duration
 	portIndex  uint16
 	portAccess sync.RWMutex
 	addrAccess sync.RWMutex
-	addrMap    map[srcdst]uint16
+	addrMap    map[tcpNatKey]uint16
 	portMap    map[uint16]*TCPSession
+}
+
+type tcpNatKey struct {
+	Source      netip.AddrPort
+	Destination netip.AddrPort
 }
 
 type TCPSession struct {
@@ -32,7 +32,7 @@ func NewNat(ctx context.Context, timeout time.Duration) *TCPNat {
 	natMap := &TCPNat{
 		timeout:   timeout,
 		portIndex: 10000,
-		addrMap:   make(map[srcdst]uint16),
+		addrMap:   make(map[tcpNatKey]uint16),
 		portMap:   make(map[uint16]*TCPSession),
 	}
 	go natMap.loopCheckTimeout(ctx)
@@ -61,7 +61,7 @@ func (n *TCPNat) checkTimeout() {
 	for natPort, session := range n.portMap {
 		session.Lock()
 		if now.Sub(session.LastActive) > n.timeout {
-			delete(n.addrMap, srcdst{session.Source, session.Destination})
+			delete(n.addrMap, tcpNatKey{Source: session.Source, Destination: session.Destination})
 			delete(n.portMap, natPort)
 		}
 		session.Unlock()
@@ -83,8 +83,8 @@ func (n *TCPNat) LookupBack(port uint16) *TCPSession {
 }
 
 func (n *TCPNat) Lookup(source netip.AddrPort, destination netip.AddrPort) uint16 {
+	key := tcpNatKey{Source: source, Destination: destination}
 	n.addrAccess.RLock()
-	key := srcdst{source, destination}
 	port, loaded := n.addrMap[key]
 	n.addrAccess.RUnlock()
 	if loaded {
