@@ -88,7 +88,6 @@ func (t *GVisor) Start() error {
 		return err
 	}
 	linkEndpoint = &LinkEndpointFilter{linkEndpoint, t.broadcastAddr, t.tun}
-	nicOptions.DisableAutoICMPReplay = true
 	ipStack, err := NewGVisorStackWithOptions(linkEndpoint, nicOptions)
 	if err != nil {
 		return err
